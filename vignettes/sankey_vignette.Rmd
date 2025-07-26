@@ -7,52 +7,75 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```{r setup, include=FALSE}
+# Global chunk options for the whole vignette
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 11,      # Make plots wide enough for Sankey layout
+  fig.height = 6,      # Height for clear ribbon spacing
+  out.width = "100%"   # Scale plots to full vignette width
+)
+
+# Load your package
 library(Assignment2)
-Introduction
-The Assignment2 package provides a function, plot_sankey_diagram(), for creating Excel‑style Sankey diagrams using ggplot2.
+```
+
+# Introduction
+The **Assignment2** package provides a function, `plot_sankey_diagram()`, for creating Excel‑style Sankey diagrams using ggplot2.  
 This vignette demonstrates how to recreate the provided Excel Sankey chart visualizing stroke risk factors over time.
 
-Key features of the function:
-- Vertical gaps to separate stacked ribbons
-- Horizontal gaps to leave white space between connectors and rectangles
-- Minimum ribbon size for better visibility of very small proportions
+## Key features of the function:
+- Vertical gaps to separate stacked ribbons  
+- Horizontal gaps to leave white space between connectors and rectangles  
+- Minimum ribbon size for better visibility of very small proportions  
 
-Basic Usage
-- The package includes an example dataset, stroke_data, which matches the structure of the Excel file.
+# Basic Usage
+The package includes an example dataset, `stroke_data`, which matches the structure of the Excel file.
 
-# Load the example dataset included in the package
-```r
+```{r}
 data("stroke_data")
 ```
 
 # Basic Sankey diagram with no gaps
-```r
+```{r}
 plot_sankey_diagram(stroke_data)
 ```
 
 # Adding Vertical and Horizontal Gaps
-You can toggle gaps by setting vertical_gap or horizontal_gap to TRUE.
-# Diagram with both vertical and horizontal gaps
-```r
-plot_sankey_diagram(stroke_data, vertical_gap = FALSE, horizontal_gap = TRUE)
-plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = FALSE)
-plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
+You can toggle gaps by setting `vertical_gap` or `horizontal_gap` to `TRUE`.
 
+# Horizontal White Space
+```{r}
+plot_sankey_diagram(stroke_data, vertical_gap = FALSE, horizontal_gap = TRUE)
 ```
-Adjusting Minimum Ribbon Size
-For very small proportions, set a minimum ribbon size so that labels are easier to read.
-```r
+
+# Vertical White Space
+```{r}
+plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = FALSE)
+```
+
+# Both Horizontal and Vertical White Space
+```{r}
+plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
+```
+
+# Adjusting Minimum Ribbon Size
+For very small proportions, set a minimum ribbon size so that labels are easier to read.  
+(Default minimum ribbon size is set to 0.06.)
+
+```{r}
 plot_sankey_diagram(stroke_data, min_ribbon_size = 0.06)
 ```
 
-Conclusion
-This vignette demonstrates how the plot_sankey_diagram() function replicates the Excel Sankey chart style in R.
+# Conclusion
+This vignette demonstrates how the `plot_sankey_diagram()` function replicates the Excel Sankey chart style in R.  
 You can customize:
-- Colors (by editing the function’s color scale)
-- White space (with vertical_gap and horizontal_gap)
-- Ribbon visibility (with min_ribbon_size)
+```
+- **Colors** (by editing the function’s color scale)  
+- **White space** (with `vertical_gap` and `horizontal_gap`)  
+- **Ribbon visibility** (with `min_ribbon_size`)  
+```
 
-For further styling, you can apply additional ggplot2 themes or save your plots with ggsave().
-
----
+For further styling, you can apply additional `ggplot2` themes or save your plots with `ggsave()`.
