@@ -8,17 +8,17 @@ This R package creates Sankey diagrams to visualize stroke risk factors over tim
 # Install directly from GitHub
 devtools::install_github("sarthikac/Assignment2")
 ```
-Usage
+## Usage
+```r
 library(Assignment2)
 plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
-Features
-Generates Sankey diagrams matching Excel’s styling.
+```
 
-Optional vertical and horizontal gaps for white space.
-
-Packaged function (plot_sankey_diagram) with arguments for flexibility.
-
-Includes a vignette explaining the project and demonstrating usage.
+## Features
+- Generates Sankey diagrams matching Excel’s styling.
+- Optional vertical and horizontal gaps for white space.
+- Packaged function (plot_sankey_diagram) with arguments for flexibility.
+- Includes a vignette explaining the project and demonstrating usage.
 
 Author
 Sarthika Chimmula
