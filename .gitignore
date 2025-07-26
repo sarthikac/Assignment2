@@ -1,4 +1,6 @@
 .Rproj.user
-inst/doc
-/doc/
-/Meta/
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+*.Rproj
