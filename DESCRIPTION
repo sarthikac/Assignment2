@@ -1,0 +1,30 @@
+Package: Assignment2
+Type: Package
+Title: Sankey Diagram for Stroke Risk Factors
+Version: 0.1.0
+Authors@R: 
+    person("Sarthika", "Chimmula", 
+           email = "sarthikac@g.ucla.edu", 
+           role = c("aut", "cre"))
+Description: Provides a function to create Excel-style Sankey diagrams 
+    to visualize stroke risk factors over time using ggplot2. 
+    Includes options to toggle horizontal and vertical gaps between 
+    ribbons and rectangles, and can generate diagrams that closely 
+    match reference Excel charts. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    ggplot2,
+    dplyr,
+    tidyr,
+    ggforce,
+    readxl
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 3.5)
