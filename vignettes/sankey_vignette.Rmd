@@ -35,7 +35,10 @@ plot_sankey_diagram(stroke_data)
 You can toggle gaps by setting vertical_gap or horizontal_gap to TRUE.
 # Diagram with both vertical and horizontal gaps
 ```r
+plot_sankey_diagram(stroke_data, vertical_gap = FALSE, horizontal_gap = TRUE)
+plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = FALSE)
 plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
+
 ```
 Adjusting Minimum Ribbon Size
 For very small proportions, set a minimum ribbon size so that labels are easier to read.
