@@ -20,5 +20,5 @@ plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
 - Packaged function (plot_sankey_diagram) with arguments for flexibility.
 - Includes a vignette explaining the project and demonstrating usage.
 
-Author
+## Author
 Sarthika Chimmula
