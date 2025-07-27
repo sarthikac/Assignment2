@@ -19,11 +19,13 @@ plot_sankey_diagram <- function(data,
   library(dplyr)
   library(tidyr)
 
-  # --- Gap settings ---
+  # --- Define spacing settings ---
+  # Controls the amount of vertical space between rectangles and the white gap at connector edges.
   vertical_gap_value <- ifelse(vertical_gap, 0.05, 0)
-  gap_width <- 0.05  # width of white space when horizontal_gap = TRUE
+  gap_width <- 0.05  # Width of the white space (horizontal gap) between rectangles and connectors.
 
-  # --- Clean Data ---
+  # --- Clean and prepare the dataset ---
+  # Removes unnecessary rows (like text artifacts or headers) and converts proportion columns to numeric.
   clean_data <- data %>%
     filter(
       !is.na(`Risk Factors for Stroke in Blacks`),
@@ -34,22 +36,26 @@ plot_sankey_diagram <- function(data,
     ) %>%
     mutate(across(-1, as.numeric))
 
-  # --- Reshape ---
+  # --- Reshape the dataset into long format ---
+  # Converts the wide table (years as columns) into long format with Year and Proportion columns.
   df_long <- clean_data %>%
     pivot_longer(cols = -1, names_to = "Year", values_to = "Proportion") %>%
     filter(Proportion > 0)
 
   df_long$Year <- as.numeric(as.character(df_long$Year))
 
-  # --- Layout constants ---
+  # --- Layout constants for the plot ---
+  # Defines spacing along the x-axis (global shift) and the width of the stacked rectangles.
   global_shift <- 1.0
   rect_width <- 1.8
 
-  # --- Minimum display size for rectangles ---
+  # --- Ensure minimum ribbon display size ---
+  # Prevents very small proportions from disappearing by setting a lower bound.
   df_long <- df_long %>%
     mutate(display_prop = ifelse(Proportion < min_ribbon_size, min_ribbon_size, Proportion))
 
-  # --- Rectangle positions ---
+  # --- Calculate rectangle positions ---
+  # For each year, calculate ymin/ymax for each rectangle and where it should be drawn on the x-axis.
   df_display <- df_long %>%
     group_by(Year) %>%
     arrange(display_prop, .by_group = TRUE) %>%
@@ -63,7 +69,8 @@ plot_sankey_diagram <- function(data,
     ) %>%
     ungroup()
 
-  # --- Connector positions ---
+  # --- Connector position calculations ---
+  # Determines the vertical span for each connector, then lines up the “from” and “to” coordinates between years.
   df_connectors <- df_display %>%
     mutate(
       ymin_conn = ymid_rect - (Proportion / 2),
@@ -81,6 +88,8 @@ plot_sankey_diagram <- function(data,
     filter(!is.na(Year_next)) %>%
     ungroup()
 
+  # --- Build polygons for connectors ---
+  # Creates a set of polygon coordinates that link rectangles from one year to the next.
   connector_polygons <- df_connectors %>%
     rowwise() %>%
     mutate(group_id = paste(`Risk Factors for Stroke in Blacks`, Year, sep = "_")) %>%
@@ -95,11 +104,12 @@ plot_sankey_diagram <- function(data,
     }) %>%
     ungroup()
 
-  # --- WHITE MASK rectangles (to carve the gap) ---
+  # --- Optional white mask rectangles for gaps ---
+  # If horizontal gaps are enabled, these white rectangles cover the connector edges where they meet the rectangles.
   gap_masks <- NULL
   if (horizontal_gap) {
     gap_masks <- bind_rows(
-      # LEFT EDGE masks
+      # Left edges
       df_display %>%
         transmute(
           xmin = xmin - 0.0001,
@@ -107,7 +117,7 @@ plot_sankey_diagram <- function(data,
           ymin = ymin_rect,
           ymax = ymax_rect
         ),
-      # RIGHT EDGE masks
+      # Right edges
       df_display %>%
         transmute(
           xmin = xmax - gap_width,
@@ -118,7 +128,7 @@ plot_sankey_diagram <- function(data,
     )
   }
 
-  # --- Colors ---
+  # --- Define color palette for the plot ---
   stroke_colors <- c(
     "Hypertension" = "#8fbc8f",
     "Diabetes" = "#ee5c42",
@@ -127,21 +137,23 @@ plot_sankey_diagram <- function(data,
     "Obesity" = "#005596"
   )
 
-  # --- Label positions ---
+  # --- Determine label positions for the first year ---
+  # Used to place risk factor labels on the left-hand side of the diagram.
   first_year <- min(df_display$Year)
   label_positions <- df_display %>%
     filter(Year == first_year) %>%
     mutate(x_label = first_year - (rect_width * 0.8) + global_shift)
 
-  # --- Plot ---
+  # --- Assemble the plot ---
+  # Add connectors, rectangles, optional white masks, text labels, and styling.
   p <- ggplot() +
-    # 1️⃣ Draw connectors (full width)
+    # Connectors
     geom_polygon(
       data = connector_polygons,
       aes(x = x, y = y, group = group, fill = RiskFactor),
       color = NA
     ) +
-    # 2️⃣ Draw rectangles (full width)
+    # Rectangles
     geom_rect(
       data = df_display,
       aes(xmin = xmin, xmax = xmax,
@@ -150,7 +162,7 @@ plot_sankey_diagram <- function(data,
       color = NA
     )
 
-  # 3️⃣ Draw white masks on top if gap is enabled
+  # If horizontal gaps are enabled, draw white masks over connector edges.
   if (horizontal_gap) {
     p <- p +
       geom_rect(
@@ -161,7 +173,7 @@ plot_sankey_diagram <- function(data,
       )
   }
 
-  # 4️⃣ Add labels
+  # Add proportion labels inside rectangles.
   p <- p +
     geom_text(
       data = df_display,
@@ -170,12 +182,14 @@ plot_sankey_diagram <- function(data,
           label = sprintf("%.2f", Proportion)),
       color = "white", fontface = "bold", size = 3.4
     ) +
+    # Add risk factor labels on the left side.
     geom_text(
       data = label_positions,
       aes(x = x_label, y = ymid_rect,
           label = `Risk Factors for Stroke in Blacks`),
       hjust = 1, size = 3.8, color = "black"
     ) +
+    # Apply color scheme and axis formatting.
     scale_fill_manual(values = stroke_colors) +
     scale_x_continuous(
       breaks = unique(df_display$Year) + global_shift,
