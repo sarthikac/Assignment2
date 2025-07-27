@@ -22,7 +22,7 @@ plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
 
 ## Vignette
 For a full walkthrough, see the vignette included in the package.
-[View the Sankey Diagram vignette](https://sarthikac.github.io/Assignment2/)
+### [View the Sankey Diagram vignette](https://sarthikac.github.io/Assignment2/)
 ```r
 vignette("sankey_vignette", package = "Assignment2")
 ```
