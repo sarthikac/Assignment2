@@ -1,4 +1,4 @@
-# Task 2 - Cedars-Sinai
+# Task 2
 
 This R package creates Sankey diagrams to visualize stroke risk factors over time, matching the formatting of the Excel chart provided in the assignment. 
 
