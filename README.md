@@ -4,8 +4,14 @@ This R package creates Sankey diagrams to visualize stroke risk factors over tim
 
 ## Installation
 
+This package is **not on CRAN**, so you install it directly from GitHub.
+
+### Install `devtools` (if not already installed)
 ```r
+install.packages("devtools")
+```
 # Install directly from GitHub
+```r
 devtools::install_github("sarthikac/Assignment2")
 ```
 ## Usage
