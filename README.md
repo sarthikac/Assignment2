@@ -10,7 +10,7 @@ This package is **not on CRAN**, so you install it directly from GitHub.
 ```r
 install.packages("devtools")
 ```
-# Install directly from GitHub
+### Install directly from GitHub
 ```r
 devtools::install_github("sarthikac/Assignment2")
 ```
