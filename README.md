@@ -17,7 +17,7 @@ devtools::install_github("sarthikac/Assignment2")
 ## Usage
 ```r
 library(Assignment2)
-data("stroke_data")
+data("stroke_data") #or the name of whatever dataset you have
 plot_sankey_diagram(stroke_data, vertical_gap = TRUE, horizontal_gap = TRUE)
 ```
 
